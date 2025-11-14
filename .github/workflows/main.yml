@@ -18,7 +18,7 @@ jobs:
         fetch-depth: 0
 
     - name: build
-      run: my_first_file.txt
+      run: my_first_file.psi
     
 
    # - name: create SBOM
