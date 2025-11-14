@@ -18,20 +18,20 @@ jobs:
         fetch-depth: 0
 
     - name: build
-      run: ./src/Build.ps1
+      run: ./my_first_file/Build.txt
 
-    - name: create SBOM
-      run: ./sbom/Create-SBOM.ps1
+   # - name: create SBOM
+   #   run: ./.sbom/Create-SBOM.ps1
 
     - name: upload-unsigned-artifact
       id: upload-unsigned-artifact
       uses: actions/upload-artifact@v4
       with:
-        name: "demo-application" 
+        name: "Demo_Pip.Int" 
         if-no-files-found: error
         path: |
-          .\_BuildResult-unsigned\DemoExample.msi
-          .\_BuildResult-unsigned\bom.xml
+          .\_BuildResult-unsigned\Demo_Pip.Int.msi
+       #   .\_BuildResult-unsigned\bom.xml
 
     - name: sign
       uses: signpath/github-action-submit-signing-request@v2
