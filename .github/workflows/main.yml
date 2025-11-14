@@ -18,7 +18,7 @@ jobs:
         fetch-depth: 0
 
     - name: build
-      run: ./my_first_file/Build.txt
+      run: ./my_first_file/Build.ps1
 
    # - name: create SBOM
    #   run: ./.sbom/Create-SBOM.ps1
