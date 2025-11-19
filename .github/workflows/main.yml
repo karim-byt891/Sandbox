@@ -35,6 +35,7 @@ jobs:
         organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
         project-slug: 'Pip.Int.Proj'
         signing-policy-slug: 'test-signing'
+        local-file: './grepWin-2.1.12-x64.msi'
         github-artifact-id:  ${{steps.upload-unsigned-artifact.outputs.artifact-id}}
         wait-for-completion: true
         output-artifact-directory: 'signed'
