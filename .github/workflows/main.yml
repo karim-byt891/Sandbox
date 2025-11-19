@@ -38,6 +38,7 @@ jobs:
         github-artifact-id:  ${{steps.upload-unsigned-artifact.outputs.artifact-id}}
         wait-for-completion: true
         output-artifact-directory: 'signed'
+        parameters: '{"local-file":"./grepWin-2.1.12-x64.msi"}'
 
     - name: Upload signed artifact
       uses: actions/upload-artifact@v4
