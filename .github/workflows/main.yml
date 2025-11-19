@@ -26,6 +26,7 @@ jobs:
       with:
         name: "unsigned"
         path: grepWin-2.1.12-x64.msi
+        compression-level: 0   
 
     - name: Sign
       uses: signpath/github-action-submit-signing-request@v2
