@@ -28,10 +28,10 @@ jobs:
       id: upload-unsigned-artifact
       uses: actions/upload-artifact@v4
       with:
-        name: "Demo_Pip.Int" 
+        name: "Pip.Int.Proj" 
         if-no-files-found: error
         path: |
-          .\_BuildResult-unsigned\Demo_Pip.Int.msi
+          .\_BuildResult-unsigned\grepWin-2.1.12-x64.msi
        #   .\_BuildResult-unsigned\bom.xml
 
     - name: sign
