@@ -17,8 +17,8 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: build
-      run: grepWin-2.1.12-x64.msi
+#    - name: build
+ #     run: grepWin-2.1.12-x64.msi
     
 
    # - name: create SBOM
