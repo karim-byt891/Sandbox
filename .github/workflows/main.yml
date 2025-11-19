@@ -6,42 +6,40 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_and_sign:
+  test:
     runs-on: windows-latest
     steps:
 
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        lfs: true
 
-    # If the MSI is already in the repo:
+    - name: Debug – list files
+      run: |
+        echo "Listing workspace"
+        ls -R .
+
     - name: Upload unsigned artifact
       id: upload-unsigned-artifact
       uses: actions/upload-artifact@v4
       with:
-        name: "Pip.Int.Proj"
-        if-no-files-found: error
-        path: |
-          ./grepWin-2.1.12-x64.msi   # <<< FIXED
+        name: "unsigned"
+        path: grepWin-2.1.12-x64.msi
 
-    - name: Sign with SignPath
+    - name: Sign
       uses: signpath/github-action-submit-signing-request@v2
-      env:
-        SIGNPATH_SIGNING_POLICY_SLUG: |
-          ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')) 
-              && 'release-signing' 
-              || 'test-signing' }}
       with:
-        api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-        organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+        api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+        organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
         project-slug: 'Pip.Int.Proj'
-        signing-policy-slug:  '${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}'
-        github-artifact-id:  "${{steps.upload-unsigned-artifact.outputs.artifact-id}}"
+        signing-policy-slug: 'test-signing'
+        github-artifact-id:  ${{steps.upload-unsigned-artifact.outputs.artifact-id}}
         wait-for-completion: true
-        output-artifact-directory: 'Pip.Int.Proj-signed'  # output folder
+        output-artifact-directory: 'signed'
 
     - name: Upload signed artifact
       uses: actions/upload-artifact@v4
       with:
-        name: "demo-application-signed"
-        path: "Pip.Int.Proj-signed"   #
-        if-no-files-found: error
+        name: "signed"
+        path: "signed"
