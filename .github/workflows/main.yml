@@ -34,7 +34,7 @@ jobs:
         organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
         project-slug: 'Pip.Int.Proj'
         signing-policy-slug: 'test-signing'
-        artifact-configuration-slug: 'initial'
+        artifact-configuration-slug: 'msi'
         github-artifact-id:  ${{steps.upload-unsigned-artifact.outputs.artifact-id}}
         wait-for-completion: true
         output-artifact-directory: 'signed'
