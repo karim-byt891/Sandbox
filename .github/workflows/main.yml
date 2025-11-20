@@ -25,7 +25,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: "unsigned"
-        path: grepWin-2.1.12-x64.msi
+        path: hello_world.py
 
     - name: Sign
       uses: signpath/github-action-submit-signing-request@v2
@@ -34,7 +34,7 @@ jobs:
         organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
         project-slug: 'Pip.Int.Proj'
         signing-policy-slug: 'test-signing'
-        artifact-configuration-slug: 'msi'
+        artifact-configuration-slug: 'test-signing_py'
         github-artifact-id:  ${{steps.upload-unsigned-artifact.outputs.artifact-id}}
         wait-for-completion: true
         output-artifact-directory: 'signed'
