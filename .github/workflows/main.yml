@@ -3,56 +3,44 @@ run-name: Demo workflow signing with SignPath
 on: 
   push:
   pull_request:
-  #schedule:
-  #  - cron:  '30 3 * * *' # every day at 3:30am UTC
-  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
-
+  workflow_dispatch:
+  
 jobs:
-  build_and_sign:
+  test:
     runs-on: windows-latest
     steps:
 
-    - name: checkout
+    - name: Checkout
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0
+        lfs: true
 
-    - name: build
-      run: ./src/Build.ps1
+    - name: Debug – list files
+      run: |
+        echo "Listing workspace"
+        ls -R .
 
-    - name: create SBOM
-      run: ./sbom/Create-SBOM.ps1
-
-    - name: upload-unsigned-artifact
+    - name: Upload unsigned artifact
       id: upload-unsigned-artifact
       uses: actions/upload-artifact@v4
       with:
-        name: "demo-application" 
-        if-no-files-found: error
-        path: |
-          .\_BuildResult-unsigned\DemoExample.msi
-          .\_BuildResult-unsigned\bom.xml
+        name: "unsigned"
+        path: grepWin-2.1.12-x64.msi
 
-    - name: sign
+    - name: Sign
       uses: signpath/github-action-submit-signing-request@v2
-      env:
-        # select release-signing policy for main and release branches
-        SIGNPATH_SIGNING_POLICY_SLUG: | 
-          ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')) 
-            && 'release-signing' 
-            || 'test-signing' }}
       with:
-        api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-        organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
-        project-slug: 'Demo_Application'
-        signing-policy-slug:  '${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}'
-        github-artifact-id:  "${{steps.upload-unsigned-artifact.outputs.artifact-id}}"
+        api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+        organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
+        project-slug: 'Pip.Int.Proj'
+        signing-policy-slug: 'test-signing'
+        artifact-configuration-slug: 'msi'
+        github-artifact-id:  ${{steps.upload-unsigned-artifact.outputs.artifact-id}}
         wait-for-completion: true
-        output-artifact-directory: 'demo-application-signed'
-    
-    - name: upload-signed-artifact
+        output-artifact-directory: 'signed'
+
+    - name: Upload signed artifact
       uses: actions/upload-artifact@v4
       with:
-        name: "demo-application-signed" 
-        path: "demo-application-signed"
-        if-no-files-found: error
+        name: "signed"
+        path: "signed"
